@@ -1,0 +1,72 @@
+services:
+
+  postgres-user:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: Mirik
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+
+  postgres-company:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: company_db
+      POSTGRES_USER: Mirik
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+
+  config-server:
+    environment:
+      SPRING_CLOUD_CONFIG_SERVER_GIT_USERNAME: Luckymirik
+      SPRING_CLOUD_CONFIG_SERVER_GIT_PASSWORD: ${GITHUB_TOKEN}
+    build: ./config-server
+    ports:
+      - "8888:8888"
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/user_db
+      SPRING_DATASOURCE_USERNAME: Mirik
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - postgres-user
+      - config-server
+      - eureka-server
+
+  company-service:
+    build: ./company-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-company:5432/company_db
+      SPRING_DATASOURCE_USERNAME: Mirik
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - postgres-company
+      - config-server
+      - eureka-server
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - company-service
+      - eureka-server
+
+  eureka-server:
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
+
+
+

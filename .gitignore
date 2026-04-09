@@ -1,0 +1,25 @@
+.env
+*.env
+
+**/target/
+**/*.class
+**/*.jar
+**/*.war
+
+.idea/
+*.iml
+*.iws
+*.irp
+.idea.zip
+
+# Maven wrapper (опционально оставить)
+# !**/mvnw
+# !**/mvnw.cmd
+
+*.log
+logs/
+
+.DS_Store
+Thumps.db
+
+docker-volumes/
