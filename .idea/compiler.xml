@@ -16,10 +16,10 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="api-gateway" options="-parameters" />
-      <module name="company-service" options="-parameters" />
-      <module name="config-server" options="-parameters" />
-      <module name="eureka-server" options="-parameters" />
+      <module name="api-gateway" options="" />
+      <module name="company-service" options="" />
+      <module name="config-server" options="" />
+      <module name="eureka-server" options="" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>
