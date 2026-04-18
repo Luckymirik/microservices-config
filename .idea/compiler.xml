@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
         <module name="config-server" />
+        <module name="shared" />
         <module name="user-service" />
         <module name="company-service" />
         <module name="eureka-server" />
@@ -20,7 +21,7 @@
       <module name="company-service" options="" />
       <module name="config-server" options="" />
       <module name="eureka-server" options="" />
-      <module name="user-service" options="-parameters" />
+      <module name="user-service" options="" />
     </option>
   </component>
 </project>

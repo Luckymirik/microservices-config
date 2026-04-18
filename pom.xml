@@ -17,6 +17,7 @@
         <module>user-service</module>
         <module>config-server</module>
         <module>eureka-server</module>
+        <module>shared</module>
     </modules>
 
 
@@ -48,19 +49,7 @@
 
         </dependencies>
     </dependencyManagement>
-    <build>
 
-
-
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-
-
-    </build>
 </project>
 
 
