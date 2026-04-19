@@ -3,7 +3,7 @@ package com.example.userservice.controllers;
 import com.example.userservice.dto.CompanyDTO;
 import com.example.userservice.dto.UserResponse;
 import com.example.userservice.entities.User;
-import com.example.userservice.services.UserService;
+import com.example.userservice.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
 
     @PostMapping
