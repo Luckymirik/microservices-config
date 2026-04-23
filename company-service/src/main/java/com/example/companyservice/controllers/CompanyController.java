@@ -3,7 +3,7 @@ package com.example.companyservice.controllers;
 import com.example.companyservice.dto.CompanyResponse;
 import com.example.companyservice.dto.UserDTO;
 import com.example.companyservice.enteties.Company;
-import com.example.companyservice.services.CompanyService;
+import com.example.companyservice.services.CompanyServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/companies")
 @RequiredArgsConstructor
 public class CompanyController {
-    private final CompanyService companyService;
+    private final CompanyServiceImpl companyService;
 
 
 
