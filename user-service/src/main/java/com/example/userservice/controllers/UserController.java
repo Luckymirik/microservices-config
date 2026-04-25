@@ -3,7 +3,7 @@ package com.example.userservice.controllers;
 import com.example.userservice.dto.CompanyDTO;
 import com.example.userservice.dto.UserResponse;
 import com.example.userservice.entities.User;
-import com.example.userservice.services.UserServiceImpl;
+import com.example.userservice.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +15,7 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserServiceImpl userService;
-
+    private final UserService userService;
 
     @PostMapping
     public User create(@RequestBody User user) {
@@ -76,6 +75,14 @@ public class UserController {
 
         log.info("GET /users/{}/full - user with company fetched", id);
         return response;
+    }
+
+    @GetMapping("/by-company/{companyId}")
+    public List<UserResponse> getUsersByCompany(@PathVariable Long companyId) {
+        log.info("GET /users/by-company/{} - fetching users", companyId);
+        List<UserResponse> users = userService.getUsersByCompanyId(companyId);
+        log.info("GET /users/by-company/{} - fetched {} users", companyId, users.size());
+        return users;
     }
 
     @DeleteMapping("/{id}")

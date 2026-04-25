@@ -121,5 +121,15 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    @Override
+    public List<UserResponse> getUsersByCompanyId(Long companyId) {
+        log.info("Service: fetching users for company {}", companyId);
+        List<User> users = repo.findByCompanyId(companyId);
+        log.info("Service: {} users found for company {}", users.size(), companyId);
+        return users.stream()
+                .map(user -> getUserWithCompany(user.getId()))
+                .toList();
+    }
+
 
 }
