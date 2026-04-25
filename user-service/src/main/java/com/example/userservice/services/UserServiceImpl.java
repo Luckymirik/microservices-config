@@ -4,6 +4,7 @@ import com.example.userservice.clients.CompanyClient;
 import com.example.userservice.dto.CompanyDTO;
 import com.example.userservice.dto.UserResponse;
 import com.example.userservice.entities.User;
+import com.example.userservice.mapper.UserMapper;
 import com.example.userservice.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository repo;
     private final CompanyClient companyClient;
+    private final UserMapper userMapper;
 
     @Override
     public User create(User user) {
@@ -104,18 +106,11 @@ public class UserServiceImpl implements UserService {
 
         if (user.getCompanyId() != null) {
             log.info("Service: calling company-service for companyId: {}", user.getCompanyId());
-
             company = companyClient.getCompanyById(user.getCompanyId());
-
             log.info("Service: company data received for user {}", id);
         }
 
-        UserResponse response = new UserResponse();
-        response.setId(user.getId());
-        response.setFirstName(user.getFirstName());
-        response.setLastName(user.getLastName());
-        response.setPhone(user.getPhone());
-        response.setCompany(company);
+        UserResponse response = userMapper.toUserResponse(user, company);
 
         log.info("Service: user {} mapped to UserResponse", id);
         return response;

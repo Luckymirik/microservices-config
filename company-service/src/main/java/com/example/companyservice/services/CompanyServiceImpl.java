@@ -1,8 +1,10 @@
 package com.example.companyservice.services;
+
 import com.example.companyservice.clients.UserClient;
 import com.example.companyservice.dto.CompanyResponse;
 import com.example.companyservice.dto.UserDTO;
 import com.example.companyservice.enteties.Company;
+import com.example.companyservice.mapper.CompanyMapper;
 import com.example.companyservice.repositories.CompanyRepository;
 import com.example.shared.exception.ConflictException;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +22,14 @@ import java.util.List;
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository repo;
     private final UserClient userClient;
+    private final CompanyMapper companyMapper;
 
     @Override
     public Company create(Company company) {
         log.info("Service: creating company with name: {}", company.getName());
 
-        if (repo.existsByName(company.getName())){
-            throw new ConflictException("Company with name '" + company.getName() + "'already exists");
+        if (repo.existsByName(company.getName())) {
+            throw new ConflictException("Company with name '" + company.getName() + "' already exists");
         }
 
         Company saved = repo.save(company);
@@ -46,17 +49,6 @@ public class CompanyServiceImpl implements CompanyService {
         return saved;
     }
 
-
-    @Override
-    public List<Company> findAll() {
-        log.info("Service: fetching all companies");
-
-        List<Company> companies = repo.findAll();
-
-        log.info("Service: {} companies found", companies.size());
-        return companies;
-    }
-
     @Override
     public Company getById(Long id) {
         log.info("Service: fetching company by id: {}", id);
@@ -65,6 +57,7 @@ public class CompanyServiceImpl implements CompanyService {
         log.info("Service: company {} found", id);
         return company;
     }
+
     @Override
     public void delete(Long id) {
         log.info("Service: deleting company with id: {}", id);
@@ -85,12 +78,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         log.info("Service: {} users fetched for company {}", users.size(), companyId);
 
-        CompanyResponse response = new CompanyResponse(
-                company.getId(),
-                company.getName(),
-                company.getBudget(),
-                users
-        );
+        CompanyResponse response = companyMapper.toCompanyResponse(company, users);
 
         log.info("Service: company {} mapped to CompanyResponse", companyId);
         return response;
