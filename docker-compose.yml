@@ -20,8 +20,6 @@ services:
 
   config-server:
     environment:
-      SPRING_CLOUD_CONFIG_SERVER_GIT_USERNAME: Luckymirik
-      SPRING_CLOUD_CONFIG_SERVER_GIT_PASSWORD: ${GITHUB_TOKEN}
     build: ./config-server
     ports:
       - "8888:8888"

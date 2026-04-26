@@ -1,9 +1,12 @@
 package com.example.userservice.controllers;
 
 import com.example.userservice.dto.CompanyDTO;
+import com.example.userservice.dto.UserRequest;
 import com.example.userservice.dto.UserResponse;
 import com.example.userservice.entities.User;
+import com.example.userservice.mapper.UserMapper;
 import com.example.userservice.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -16,25 +19,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @PostMapping
-    public User create(@RequestBody User user) {
-        log.info("Post /users - creating user: {}", user);
-
-        User createdUser = userService.create(user);
-
-        log.info("Post /users - user created with id: {}", createdUser.getId());
-        return createdUser;
+    public User create(@Valid @RequestBody UserRequest request) {
+        log.info("Post /users - creating user with phone: {}", request.getPhone());
+        User user = userMapper.toUser(request);
+        User created = userService.create(user);
+        log.info("Post /users - user created with id: {}", created.getId());
+        return created;
     }
 
     @PutMapping("/{id}")
-    public User update(@PathVariable Long id, @RequestBody User user) {
-        log.info("PUT /users/{} - updating user: {}", id, user);
-
-        User updateUser = userService.update(id, user);
-
+    public User update(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+        log.info("PUT /users/{} - updating user", id);
+        User user = userMapper.toUser(request);
+        User updated = userService.update(id, user);
         log.info("PUT /users/{} - user updated successfully", id);
-        return updateUser;
+        return updated;
     }
 
     @GetMapping

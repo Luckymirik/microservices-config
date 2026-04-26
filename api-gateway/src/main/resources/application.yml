@@ -5,10 +5,10 @@ spring:
         webflux:
           routes:
             - id: user-service
-              uri: http://user-service:8081
+              uri: lb://user-service
               predicates:
                 - Path=/users/**
             - id: company-service
-              uri: http://company-service:8082
+              uri: lb://company-service
               predicates:
                 - Path=/companies/**

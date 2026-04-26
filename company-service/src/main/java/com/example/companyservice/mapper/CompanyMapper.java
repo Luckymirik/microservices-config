@@ -1,5 +1,6 @@
 package com.example.companyservice.mapper;
 
+import com.example.companyservice.dto.CompanyRequest;
 import com.example.companyservice.dto.CompanyResponse;
 import com.example.companyservice.dto.UserDTO;
 import com.example.companyservice.enteties.Company;
@@ -12,4 +13,6 @@ import java.util.List;
 public interface CompanyMapper {
 
     CompanyResponse toCompanyResponse(Company company, List<UserDTO> users);
+
+    Company toCompany(CompanyRequest request);
 }
