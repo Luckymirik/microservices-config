@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toMap(
                         FieldError::getField,
                         error -> error.getDefaultMessage() != null
-                        ? error.getDefaultMessage()
+                                ? error.getDefaultMessage()
                                 : "Invalid value"
                 ));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
