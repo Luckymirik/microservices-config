@@ -7,7 +7,9 @@ import com.example.userservice.entities.User;
 import com.example.userservice.mapper.UserMapper;
 import com.example.userservice.services.UserService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +19,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserController {
-    private final UserService userService;
-    private final UserMapper userMapper;
+    final UserService userService;
+    final UserMapper userMapper;
 
     @PostMapping
     public User create(@Valid @RequestBody UserRequest request) {

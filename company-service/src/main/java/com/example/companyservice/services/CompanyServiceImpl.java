@@ -7,7 +7,9 @@ import com.example.companyservice.enteties.Company;
 import com.example.companyservice.mapper.CompanyMapper;
 import com.example.companyservice.repositories.CompanyRepository;
 import com.example.shared.exception.ConflictException;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +21,11 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompanyServiceImpl implements CompanyService {
-    private final CompanyRepository repo;
-    private final UserClient userClient;
-    private final CompanyMapper companyMapper;
+    final CompanyRepository repo;
+    final UserClient userClient;
+    final CompanyMapper companyMapper;
 
     @Override
     public Company create(Company company) {

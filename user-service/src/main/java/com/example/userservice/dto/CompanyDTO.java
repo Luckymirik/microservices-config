@@ -1,16 +1,19 @@
 package com.example.userservice.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompanyDTO {
-    private Long id;
-    private String name;
-    private Long budget;
+    Long id;
+    String name;
+    Long budget;
 
 
 }

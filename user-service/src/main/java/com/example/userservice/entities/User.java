@@ -1,10 +1,8 @@
 package com.example.userservice.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "users")
@@ -12,21 +10,21 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
     @Column(nullable = false)
-    private String firstName;
+    String firstName;
 
     @Column(nullable = false)
-    private String lastName;
+    String lastName;
 
     @Column(nullable = false)
-    private String phone;
+    String phone;
 
-    private Long companyId;
-
+    Long companyId;
 
 }

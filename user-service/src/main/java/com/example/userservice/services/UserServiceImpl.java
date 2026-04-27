@@ -6,7 +6,9 @@ import com.example.userservice.dto.UserResponse;
 import com.example.userservice.entities.User;
 import com.example.userservice.mapper.UserMapper;
 import com.example.userservice.repositories.UserRepository;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.example.shared.exception.NotFoundException;
@@ -16,10 +18,11 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserServiceImpl implements UserService {
-    private final UserRepository repo;
-    private final CompanyClient companyClient;
-    private final UserMapper userMapper;
+    final UserRepository repo;
+    final CompanyClient companyClient;
+    final UserMapper userMapper;
 
     @Override
     public User create(User user) {
@@ -83,8 +86,6 @@ public class UserServiceImpl implements UserService {
         log.info("Service: fetching company for user {}", userId);
 
         User user = getById(userId);
-
-
         if (user.getCompanyId() == null) {
             log.info("Service: user {} has no company", userId);
             return null;
@@ -100,8 +101,6 @@ public class UserServiceImpl implements UserService {
         log.info("Service: fetching user with company for id: {}", id);
 
         User user = getById(id);
-
-
         CompanyDTO company = null;
 
         if (user.getCompanyId() != null) {

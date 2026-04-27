@@ -6,7 +6,9 @@ import com.example.companyservice.enteties.Company;
 import com.example.companyservice.mapper.CompanyMapper;
 import com.example.companyservice.services.CompanyService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,9 +18,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/companies")
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompanyController {
-    private final CompanyService companyService;
-    private final CompanyMapper companyMapper;
+    final CompanyService companyService;
+    final CompanyMapper companyMapper;
 
     @GetMapping("/simple/{id}")
     public Company getSimpleById(@PathVariable Long id) {
