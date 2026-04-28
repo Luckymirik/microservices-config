@@ -7,11 +7,10 @@ COPY api-gateway/pom.xml api-gateway/
 COPY config-server/pom.xml config-server/
 COPY eureka-server/pom.xml eureka-server/
 COPY shared/pom.xml shared/
-COPY shared/src shared/src
-COPY user-service/src user-service/src
-RUN mvn clean package -pl user-service -am -DskipTests
+COPY eureka-server/src eureka-server/src
+RUN mvn clean package -pl eureka-server -am -DskipTests
 
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=build /app/user-service/target/*.jar app.jar
+COPY --from=build /app/eureka-server/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
