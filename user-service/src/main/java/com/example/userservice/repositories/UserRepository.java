@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByCompanyId(Long companyId);
+    boolean existsByPhone(String phone);
 }

@@ -76,13 +76,17 @@ public class CompanyServiceImpl implements CompanyService {
 
         Company company = getById(companyId);
 
-        log.info("Service: calling user-service for users of company {}", companyId);
-        List<UserDTO> users = userClient.getUsersByCompanyId(companyId);
-
-        log.info("Service: {} users fetched for company {}", users.size(), companyId);
+        List<UserDTO> users;
+        try {
+            log.info("Service: calling user-service for users of company {}", companyId);
+            users = userClient.getUsersByCompanyId(companyId);
+            log.info("Service: {} users fetched for company {}", users.size(), companyId);
+        } catch (feign.FeignException e) {
+            log.error("Service: user-service unavailable for company {}", companyId);
+            users = List.of();
+        }
 
         CompanyResponse response = companyMapper.toCompanyResponse(company, users);
-
         log.info("Service: company {} mapped to CompanyResponse", companyId);
         return response;
     }

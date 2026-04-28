@@ -1,5 +1,7 @@
 package com.example.userservice.services;
 
+import com.example.shared.exception.ConflictException;
+import com.example.shared.exception.NotFoundException;
 import com.example.userservice.clients.CompanyClient;
 import com.example.userservice.dto.CompanyDTO;
 import com.example.userservice.dto.UserResponse;
@@ -11,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.example.shared.exception.NotFoundException;
 
 import java.util.List;
 
@@ -28,8 +29,11 @@ public class UserServiceImpl implements UserService {
     public User create(User user) {
         log.info("Service: creating user with phone: {}", user.getPhone());
 
-        User saved = repo.save(user);
+        if (repo.existsByPhone(user.getPhone())) {
+            throw new ConflictException("User with phone '" + user.getPhone() + "' already exists");
+        }
 
+        User saved = repo.save(user);
         log.info("Service: user created with id: {}", saved.getId());
         return saved;
     }
@@ -86,14 +90,22 @@ public class UserServiceImpl implements UserService {
         log.info("Service: fetching company for user {}", userId);
 
         User user = getById(userId);
+
         if (user.getCompanyId() == null) {
             log.info("Service: user {} has no company", userId);
             return null;
         }
 
-
-        log.info("Service: calling - company-service for companyId: {}", user.getCompanyId());
-        return companyClient.getCompanyById(user.getCompanyId());
+        try {
+            log.info("Service: calling company-service for companyId: {}", user.getCompanyId());
+            return companyClient.getCompanyById(user.getCompanyId());
+        } catch (feign.FeignException.NotFound e) {
+            log.warn("Service: company {} not found", user.getCompanyId());
+            throw new NotFoundException("Company not found with id: " + user.getCompanyId());
+        } catch (feign.FeignException e) {
+            log.error("Service: company-service unavailable");
+            throw new NotFoundException("Company service unavailable");
+        }
     }
 
     @Override
@@ -101,16 +113,25 @@ public class UserServiceImpl implements UserService {
         log.info("Service: fetching user with company for id: {}", id);
 
         User user = getById(id);
+
         CompanyDTO company = null;
 
         if (user.getCompanyId() != null) {
-            log.info("Service: calling company-service for companyId: {}", user.getCompanyId());
-            company = companyClient.getCompanyById(user.getCompanyId());
-            log.info("Service: company data received for user {}", id);
+            try {
+                log.info("Service: calling company-service for companyId: {}", user.getCompanyId());
+                company = companyClient.getCompanyById(user.getCompanyId());
+                log.info("Service: company data received for user {}", id);
+            } catch (feign.FeignException.NotFound e) {
+                log.warn("Service: company {} not found for user {}", user.getCompanyId(), id);
+                company = null;
+            } catch (feign.FeignException e) {
+                log.error("Service: company-service unavailable for user {}", id);
+                throw new NotFoundException("Company service unavailable");
+            }
+
         }
 
         UserResponse response = userMapper.toUserResponse(user, company);
-
         log.info("Service: user {} mapped to UserResponse", id);
         return response;
     }

@@ -94,9 +94,3 @@ services:
         condition: service_started
       company-service:
         condition: service_started
-
-
-
-
-
-
