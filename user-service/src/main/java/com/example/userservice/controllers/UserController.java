@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// ... (импорты остаются прежними)
+
 @Slf4j
 @RestController
 @RequestMapping("/users")
@@ -34,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User update(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+    public User update(@PathVariable("id") Long id, @Valid @RequestBody UserRequest request) {
         log.info("PUT /users/{} - updating user", id);
         User user = userMapper.toUser(request);
         User updated = userService.update(id, user);
@@ -45,45 +47,37 @@ public class UserController {
     @GetMapping
     public List<UserResponse> getAll() {
         log.info("GET /users - fetching all users");
-
         List<UserResponse> users = userService.getAll();
-
         log.info("GET /users - fetched {} users", users.size());
         return users;
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable Long id) {
+    public User getById(@PathVariable("id") Long id) {
         log.info("GET /users/{} - request received", id);
-
         User user = userService.getById(id);
-
         log.info("GET /users/{} - user fetched successfully", id);
         return user;
     }
 
     @GetMapping("/{id}/company")
-    public CompanyDTO getCompany(@PathVariable Long id) {
+    public CompanyDTO getCompany(@PathVariable("id") Long id) {
         log.info("GET /users/{}/company - fetching company for user", id);
-
         CompanyDTO company = userService.getCompanyForUser(id);
-
         log.info("GET /users/{}/company - company fetched successfully", id);
         return company;
     }
 
     @GetMapping("/{id}/full")
-    public UserResponse getUserWithCompany(@PathVariable Long id) {
+    public UserResponse getUserWithCompany(@PathVariable("id") Long id) {
         log.info("GET /users/{}/full - fetching user with company", id);
-
         UserResponse response = userService.getUserWithCompany(id);
-
         log.info("GET /users/{}/full - user with company fetched", id);
         return response;
     }
 
     @GetMapping("/by-company/{companyId}")
-    public List<UserResponse> getUsersByCompany(@PathVariable Long companyId) {
+    public List<UserResponse> getUsersByCompany(@PathVariable("companyId") Long companyId) {
         log.info("GET /users/by-company/{} - fetching users", companyId);
         List<UserResponse> users = userService.getUsersByCompanyId(companyId);
         log.info("GET /users/by-company/{} - fetched {} users", companyId, users.size());
@@ -91,13 +85,13 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable("id") Long id) {
         log.info("DELETE /users/{} - deleting user", id);
-
         userService.delete(id);
-
         log.info("DELETE /users/{} - user deleted successfully", id);
     }
-
-
 }
+
+
+
+
