@@ -10,5 +10,5 @@ import java.util.List;
 @FeignClient(name = "user-service")
 public interface UserClient {
     @GetMapping("/users/by-company/{companyId}")
-    List<UserDTO> getUsersByCompanyId(@PathVariable Long companyId);
+    List<UserDTO> getUsersByCompanyId(@PathVariable("companyId") Long companyId);
 }
